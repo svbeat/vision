@@ -111,6 +111,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"  />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="NumPoints"
+                android:id="@+id/tvNumPoints"/>
+            <NumberPicker android:id="@+id/npNumPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"  />
+        </LinearLayout>
     </LinearLayout>
 
     <Button

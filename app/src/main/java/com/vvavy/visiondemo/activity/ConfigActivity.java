@@ -136,6 +136,21 @@ public class ConfigActivity extends Activity {
                 configView.invalidate();
             }
         });
+
+        np = (NumberPicker) findViewById(R.id.npNumPoints);
+        np.setMinValue(0);
+        np.setMaxValue(Config.MAX_NUMOFPOINTS);
+        np.setWrapSelectorWheel(false);
+        np.setValue(config.getNumPoints());
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                config.setNumPoints(newVal);
+                PerimetryExam e = (new PerimetryExam.Builder(config)).create();
+                exam.setPoints(e.getPoints());
+                configView.invalidate();
+            }
+        });
     }
 
     private void adjustIntensity() {

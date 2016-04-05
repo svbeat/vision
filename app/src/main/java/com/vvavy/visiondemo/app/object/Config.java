@@ -20,24 +20,26 @@ public class Config {
     public static final String  PROP_NAME_ALPHA = "ALPHA";
     public static final String  PROP_NAME_RADIUS = "RADIUS";
     public static final String  PROP_NAME_GAP = "GAP";
+    public static final String  PROP_NAME_NUMOFPOINTS = "NUM_OF_POINTS";
 
     public static final int     DEFAULT_GREY = 0xFF;
     public static final int     DEFAULT_ALPHA = 0xFF;
     public static final int     DEFAULT_RADIUS = 5;
     public static final int     DEFAULT_GAP = 20;
+    public static final int     DEFAULT_NUMOFPOINTS = 5;
 
     public static final int     MAX_GREY = 0xFF;
     public static final int     MAX_ALPHA = 0xFF;
     public static final int     MAX_RADIUS = 30;
     public static final int     MAX_GAP = 100;
-
+    public static final int     MAX_NUMOFPOINTS = 40;
     public static final int     CENTER_RADIUS = 6;
 
     private int centerLeftX, centerRightX, centerY;
-    private int grey, alpha, radius, gap;
+    private int grey, alpha, radius, gap, numPoints;
 
 
-    private Config (int centerLeftX, int centerRightX, int centerY, int grey, int alpha, int radius, int gap) {
+    private Config (int centerLeftX, int centerRightX, int centerY, int grey, int alpha, int radius, int gap, int numPoints) {
         this.centerLeftX = centerLeftX;
         this.centerRightX = centerRightX;
         this.centerY = centerY;
@@ -45,6 +47,7 @@ public class Config {
         this.alpha = alpha;
         this.radius = radius;
         this.gap = gap;
+        this.numPoints = numPoints;
 
     }
 
@@ -104,6 +107,14 @@ public class Config {
         this.gap = gap;
     }
 
+    public int getNumPoints() {
+        return numPoints;
+    }
+
+    public void setNumPoints(int numPoints) {
+        this.numPoints = numPoints;
+    }
+
     public static Config loadConfig(Activity activity) {
         SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
@@ -114,7 +125,8 @@ public class Config {
                                    sharedPref.getInt(PROP_NAME_GREY, DEFAULT_GREY),
                                    sharedPref.getInt(PROP_NAME_ALPHA, DEFAULT_ALPHA),
                                    sharedPref.getInt(PROP_NAME_RADIUS, DEFAULT_RADIUS),
-                                   sharedPref.getInt(PROP_NAME_GAP, DEFAULT_GAP));
+                                   sharedPref.getInt(PROP_NAME_GAP, DEFAULT_GAP),
+                                   sharedPref.getInt(PROP_NAME_NUMOFPOINTS, DEFAULT_NUMOFPOINTS) );
         return config;
     }
 
@@ -137,14 +149,13 @@ public class Config {
         editor.putInt(PROP_NAME_ALPHA, alpha);
         editor.putInt(PROP_NAME_GAP, gap);
         editor.putInt(PROP_NAME_RADIUS, radius);
+        editor.putInt(PROP_NAME_NUMOFPOINTS, numPoints);
 
         editor.commit();
     }
 
 
     public void reset(Activity activity) {
-        SharedPreferences sharedPref = activity.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
         Point size = getDisplaySize(activity);
         centerLeftX = (int)(size.x*0.25);
         centerRightX = (int)(size.x*0.75);
@@ -153,6 +164,6 @@ public class Config {
         alpha = DEFAULT_ALPHA;
         radius = DEFAULT_RADIUS;
         gap = DEFAULT_GAP;
-
+        numPoints = DEFAULT_NUMOFPOINTS;
     }
 }

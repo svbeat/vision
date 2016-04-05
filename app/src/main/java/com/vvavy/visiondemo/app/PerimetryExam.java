@@ -6,6 +6,8 @@ import com.vvavy.visiondemo.app.object.Config;
 import com.vvavy.visiondemo.app.object.PerimetryPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -185,6 +187,17 @@ public class PerimetryExam {
             points.add(new PerimetryPoint(new Point(-5, -3)));
             points.add(new PerimetryPoint(new Point(-7, -1)));
 
+            Collections.sort(points, new Comparator<PerimetryPoint>() {
+                @Override
+                public int compare(PerimetryPoint p1, PerimetryPoint p2) {
+                    return ((p1.getPoint().x*p1.getPoint().x+p1.getPoint().y*p1.getPoint().y)-
+                            (p2.getPoint().x*p2.getPoint().x+p2.getPoint().y*p2.getPoint().y));
+                }
+            });
+
+            if (config.getNumPoints()<=points.size()) {
+                points = points.subList(0, config.getNumPoints());
+            }
             PerimetryExam exam = new PerimetryExam(points,
                     config.getCenterLeftX(),
                     config.getCenterRightX(),

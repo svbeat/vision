@@ -12,6 +12,7 @@ public class IntensityHandler {
     public static int MAX_DB = 40;
     public static int MIN_DB = 0;
 
+    public static int INIT_DB = 4;
     public static Intensity[] ALL_INTENSITIES = generateAllIntensities();
 
     public static double calcIntensityDB(int alpha, int brightness) {
@@ -49,31 +50,30 @@ public class IntensityHandler {
     private boolean     done = false;
 
     public IntensityHandler() {
-        this.intensity = ALL_INTENSITIES[MIN_DB];
+        this.intensity = ALL_INTENSITIES[INIT_DB];
     }
 
     public void adjustIntensity(boolean visible) {
         /*
          1. start with dbstep=4
             if visible, brightness+=4, till dbInt==40;
-            if not visible && dbInt>=2, dbstep=2, brightness-=2; else dbInt=-1, done
+            if not visible && dbInt>=2, dbstep=2, brightness-=2; else dbInt=0, done
          2. dbstep=2
-            if visible, brightness+=2, till dbInt==40;
-            if not visible && dbInt >=1, dbstep=1, brightness-=1; else dbInt=-1, done
+            set dbstep=1
+            if visible, brightness+=1, till dbInt==40;
+            if not visible && dbInt >=1, brightness-=1; else dbInt=0, done
          3. dbstep=1
             if visible, brightness+=1, till dbInt=40;
-            if not visible, done.
+            done.
           */
-        if (visible) {
-            if (intensity.getDbInt()+dbStep>MAX_DB) {
-                intensity = ALL_INTENSITIES[MAX_DB];
-                done= true;
-            } else {
-                intensity = ALL_INTENSITIES[intensity.getDbInt()+dbStep];
-            }
-        } else {
-            if (dbStep == 1) {
-                done = true;
+        if (dbStep == 4) {
+            if (visible) {
+                if (intensity.getDbInt()+dbStep>MAX_DB) {
+                    intensity = ALL_INTENSITIES[MAX_DB];
+                    done= true;
+                } else {
+                    intensity = ALL_INTENSITIES[intensity.getDbInt()+dbStep];
+                }
             } else {
                 dbStep = dbStep/2;
                 if ((intensity.getDbInt()-dbStep)<MIN_DB) {
@@ -83,6 +83,32 @@ public class IntensityHandler {
                     intensity = ALL_INTENSITIES[intensity.getDbInt()-dbStep];
                 }
             }
+        } else if (dbStep == 2) {
+            dbStep = 1;
+            if (visible) {
+                if (intensity.getDbInt()+dbStep>MAX_DB) {
+                    intensity = ALL_INTENSITIES[MAX_DB];
+                    done= true;
+                } else {
+                    intensity = ALL_INTENSITIES[intensity.getDbInt()+dbStep];
+                }
+            } else {
+                if ((intensity.getDbInt()-dbStep)<MIN_DB) {
+                    intensity = ALL_INTENSITIES[MIN_DB];
+                    done = true;
+                } else {
+                    intensity = ALL_INTENSITIES[intensity.getDbInt()-dbStep];
+                }
+            }
+        } else if (dbStep == 1) {
+            if (visible) {
+                if (intensity.getDbInt()+dbStep>MAX_DB) {
+                    intensity = ALL_INTENSITIES[MAX_DB];
+                } else {
+                    intensity = ALL_INTENSITIES[intensity.getDbInt()+dbStep];
+                }
+            }
+            done= true;
         }
     }
 
